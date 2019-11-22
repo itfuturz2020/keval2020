@@ -18,8 +18,6 @@ class studentForm extends StatefulWidget {
 
 class _studentFormState extends State<studentForm> {
   List<courceClass> _courceClassList = [];
-
-
   bool isLoading = false;
 
   TextEditingController txtName = new TextEditingController();
