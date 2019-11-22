@@ -254,6 +254,18 @@ class _studentFormState extends State<studentForm> {
     }
   }
 
+  _clearData(){
+    setState(() {
+      txtName.text="";
+      txtFatherName.text="";
+      txtFatherMobile.text="";
+      txtMotherName.text="";
+      txtMotherMobile.text="";
+      txtAddress.text="";
+      _studentImage =null;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
