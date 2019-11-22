@@ -36,7 +36,7 @@ class _studentFormState extends State<studentForm> {
 
   DateTimePickerLocale _locale = DateTimePickerLocale.en_us;
 
-  String _format = 'yyyy-MMMM-dd';
+  String _format = 'yyyy-MM-dd';
   TextEditingController _formatCtrl = TextEditingController();
 
   DateTime _dateTime;
@@ -67,38 +67,27 @@ class _studentFormState extends State<studentForm> {
       final result = await InternetAddress.lookup('google.com');
       if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
         Future res = Services.getCource();
-        setState(() {
-          isLoading = true;
-        });
+        pr.show();
         res.then((data) async {
+          pr.hide();
           if (data != null) {
             setState(() {
               _courceClassList = data;
-              isLoading = false;
             });
           } else {
             setState(() {
-              isLoading = false;
               _courceClassList = data;
             });
           }
         }, onError: (e) {
           showMsg("$e");
-          setState(() {
-            isLoading = false;
-          });
+          pr.hide();
         });
       } else {
         showMsg("No Internet Connection.");
-        setState(() {
-          isLoading = false;
-        });
       }
     } on SocketException catch (_) {
       showMsg("No Internet Connection.");
-      setState(() {
-        isLoading = false;
-      });
     }
   }
 
@@ -237,7 +226,7 @@ class _studentFormState extends State<studentForm> {
             "Id": 0,
             "Name": txtName.text,
             "FatherName": txtFatherName.text,
-            "FatherMobile": txtFatherMobile,
+            "FatherMobile": txtFatherMobile.text,
             "MotherName": txtMotherName.text,
             "MotherMobile": txtMotherMobile.text,
             "Address": txtAddress.text,
@@ -250,6 +239,7 @@ class _studentFormState extends State<studentForm> {
           });
 
           Services.SaveStudent(formData).then((data) async {
+            pr.hide();
             if (data.Data != "0" && data.IsSuccess == true) {
               showMsg("Student Saved Successfully", title: "Success");
             } else {
@@ -381,7 +371,7 @@ class _studentFormState extends State<studentForm> {
                   controller: txtMotherName,
                   keyboardType: TextInputType.text,
                   decoration: InputDecoration(
-                      prefixIcon: Icon(Icons.phone),
+                      prefixIcon: Icon(Icons.person_add),
                       labelText: "Mother Name",
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(8),

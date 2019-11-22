@@ -39,24 +39,25 @@ class Services {
     print(body.toString());
     String url = API_URL + 'SaveStudent';
     print("SaveStudent : " + url);
-    dio.options.contentType = Headers.formUrlEncodedContentType;
-    dio.options.responseType = ResponseType.json;
+//    dio.options.contentType = Headers.formUrlEncodedContentType;
+//    dio.options.responseType = ResponseType.json;
     try {
       final response = await dio.post(url, data: body);
       if (response.statusCode == 200) {
         SaveDataClass saveData =
             new SaveDataClass(Message: 'No Data', IsSuccess: false, Data: '0');
 
-        xml2json.parse(response.data.toString());
-        var jsonData = xml2json.toParker();
-        var responseData = json.decode(jsonData);
+//        xml2json.parse(response.data.toString());
+//        var jsonData = xml2json.toParker();
+//        var responseData = json.decode(jsonData);
+        var responseData = response.data;
 
-        print("SaveStudent Response: " + responseData["ResultData"].toString());
+        print("SaveStudent Response: " + responseData.toString());
 
-        saveData.Message = responseData["ResultData"]["Message"].toString();
+        saveData.Message = responseData["Message"].toString();
         saveData.IsSuccess =
-            responseData["ResultData"]["IsSuccess"] == "true" ? true : false;
-        saveData.Data = responseData["ResultData"]["Data"].toString();
+            responseData["IsSuccess"] == "true" ? true : false;
+        saveData.Data = responseData["Data"].toString();
 
         return saveData;
       } else {
