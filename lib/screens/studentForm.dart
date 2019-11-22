@@ -111,13 +111,6 @@ class _studentFormState extends State<studentForm> {
     );
   }
 
-  _onCourceSelect(val) {
-    setState(() {
-      print(val.name);
-      _courceClass = val;
-    });
-  }
-
   void _showDatePicker() {
     DatePicker.showDatePicker(
       context,
