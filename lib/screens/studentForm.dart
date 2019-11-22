@@ -36,7 +36,7 @@ class _studentFormState extends State<studentForm> {
 
   DateTimePickerLocale _locale = DateTimePickerLocale.en_us;
 
-  String _format = 'yyyy-MM-dd';
+  String _format = 'yyyy-MMMM-dd';
   TextEditingController _formatCtrl = TextEditingController();
 
   DateTime _dateTime;
