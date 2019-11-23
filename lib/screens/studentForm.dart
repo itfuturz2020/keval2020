@@ -33,6 +33,7 @@ class _studentFormState extends State<studentForm> {
   String _path;
   bool _loadingPath = false;
   bool _hasValidMime = false;
+  String name, fatherName, motherName, fatherMobile, motherMobile, address;
 
   DateTimePickerLocale _locale = DateTimePickerLocale.en_us;
 
@@ -234,6 +235,7 @@ class _studentFormState extends State<studentForm> {
           Services.SaveStudent(formData).then((data) async {
             pr.hide();
             if (data.Data != "0" && data.IsSuccess == true) {
+              _clearData();
               showMsg("Student Saved Successfully", title: "Success");
             } else {
               showMsg(data.Message, title: "Error");
@@ -254,15 +256,16 @@ class _studentFormState extends State<studentForm> {
     }
   }
 
-  _clearData(){
+  _clearData() {
     setState(() {
-      txtName.text="";
-      txtFatherName.text="";
-      txtFatherMobile.text="";
-      txtMotherName.text="";
-      txtMotherMobile.text="";
-      txtAddress.text="";
-      _studentImage =null;
+      txtName.text = "";
+      txtFatherName.text = "";
+      txtFatherMobile.text = "";
+      txtMotherName.text = "";
+      txtMotherMobile.text = "";
+      txtAddress.text = "";
+      _studentImage = null;
+      _courceClass = null;
     });
   }
 
@@ -279,6 +282,45 @@ class _studentFormState extends State<studentForm> {
         child: SingleChildScrollView(
           child: Column(
             children: <Widget>[
+              txtName.text == "" &&
+                      txtFatherName.text == "" &&
+                      txtFatherMobile.text == "" &&
+                      txtMotherName.text == "" &&
+                      txtMotherMobile.text == "" &&
+                      txtAddress.text == "" &&
+                      _studentImage == null &&
+                      _courceClass == null
+                  ? Container()
+                  : GestureDetector(
+                      onTap: () {
+                        _clearData();
+                      },
+                      child: Align(
+                        alignment: Alignment.centerRight,
+                        child: Container(
+                          width: 100,
+                          height: 40,
+                          padding: EdgeInsets.only(left: 7, right: 7),
+                          decoration: BoxDecoration(
+                            color: Colors.grey[300],
+                            borderRadius: BorderRadius.all(Radius.circular(25)),
+                          ),
+                          child: Row(
+                            children: <Widget>[
+                              Icon(
+                                Icons.clear,
+                                size: 22,
+                              ),
+                              Text(
+                                "Clear All",
+                                style: TextStyle(
+                                    fontSize: 15, fontWeight: FontWeight.w600),
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
               Padding(
                 padding: const EdgeInsets.all(6.0),
                 child: SizedBox(
@@ -334,6 +376,11 @@ class _studentFormState extends State<studentForm> {
                               color: cnst.appPrimaryMaterialColor,
                               style: BorderStyle.solid,
                               width: 3))),
+                  onChanged: (val) {
+                    setState(() {
+                      name = val;
+                    });
+                  },
                 ),
               ),
               Padding(
@@ -350,6 +397,11 @@ class _studentFormState extends State<studentForm> {
                               color: cnst.appPrimaryMaterialColor,
                               style: BorderStyle.solid,
                               width: 3))),
+                  onChanged: (val) {
+                    setState(() {
+                      fatherName = val;
+                    });
+                  },
                 ),
               ),
               Padding(
@@ -368,6 +420,11 @@ class _studentFormState extends State<studentForm> {
                               color: cnst.appPrimaryMaterialColor,
                               style: BorderStyle.solid,
                               width: 3))),
+                  onChanged: (val) {
+                    setState(() {
+                      fatherMobile = val;
+                    });
+                  },
                 ),
               ),
               Padding(
@@ -384,6 +441,11 @@ class _studentFormState extends State<studentForm> {
                               color: cnst.appPrimaryMaterialColor,
                               style: BorderStyle.solid,
                               width: 3))),
+                  onChanged: (val) {
+                    setState(() {
+                      motherName = val;
+                    });
+                  },
                 ),
               ),
               Padding(
@@ -402,6 +464,11 @@ class _studentFormState extends State<studentForm> {
                               color: cnst.appPrimaryMaterialColor,
                               style: BorderStyle.solid,
                               width: 3))),
+                  onChanged: (val) {
+                    setState(() {
+                      motherMobile = val;
+                    });
+                  },
                 ),
               ),
               Padding(
@@ -419,6 +486,11 @@ class _studentFormState extends State<studentForm> {
                               color: cnst.appPrimaryMaterialColor,
                               style: BorderStyle.solid,
                               width: 3))),
+                  onChanged: (val) {
+                    setState(() {
+                      address = val;
+                    });
+                  },
                 ),
               ),
               GestureDetector(
@@ -451,37 +523,40 @@ class _studentFormState extends State<studentForm> {
                 ),
               ),
               Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  GestureDetector(
-                    onTap: () {
-                      _imagePopup(context);
-                    },
-                    child: Align(
-                      alignment: Alignment.center,
-                      child: Container(
-                        height: 50,
-                        width: 150,
-                        padding: EdgeInsets.only(left: 7, right: 7),
-                        decoration: BoxDecoration(
-                          color: appPrimaryMaterialColor[700],
-                          borderRadius: BorderRadius.all(Radius.circular(25)),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: <Widget>[
-                            Icon(
-                              Icons.camera_alt,
-                              size: 25,
-                              color: Colors.white,
-                            ),
-                            Text(
-                              "Student Photo",
-                              style: TextStyle(
-                                  fontSize: 13,
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w600),
-                            )
-                          ],
+                  Expanded(
+                    child: GestureDetector(
+                      onTap: () {
+                        _imagePopup(context);
+                      },
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: Container(
+                          height: 50,
+                          width: 150,
+                          padding: EdgeInsets.only(left: 7, right: 7),
+                          decoration: BoxDecoration(
+                            color: appPrimaryMaterialColor[700],
+                            borderRadius: BorderRadius.all(Radius.circular(25)),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: <Widget>[
+                              Icon(
+                                Icons.camera_alt,
+                                size: 25,
+                                color: Colors.white,
+                              ),
+                              Text(
+                                "Student Photo",
+                                style: TextStyle(
+                                    fontSize: 13,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w600),
+                              )
+                            ],
+                          ),
                         ),
                       ),
                     ),
@@ -498,6 +573,18 @@ class _studentFormState extends State<studentForm> {
                           ),
                         )
                       : Container(),
+                  Align(
+                    alignment: Alignment.topRight,
+                    child: _studentImage != null
+                        ? IconButton(
+                            icon: Icon(Icons.clear),
+                            onPressed: () {
+                              setState(() {
+                                _studentImage = null;
+                              });
+                            })
+                        : Container(),
+                  )
                 ],
               ),
               Padding(
