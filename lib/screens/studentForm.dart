@@ -33,7 +33,6 @@ class _studentFormState extends State<studentForm> {
   String _path;
   bool _loadingPath = false;
   bool _hasValidMime = false;
-  String name, fatherName, motherName, fatherMobile, motherMobile, address;
 
   DateTimePickerLocale _locale = DateTimePickerLocale.en_us;
 
@@ -238,6 +237,7 @@ class _studentFormState extends State<studentForm> {
               _clearData();
               showMsg("Student Saved Successfully", title: "Success");
             } else {
+              _clearData();
               showMsg(data.Message, title: "Error");
             }
           }, onError: (e) {
@@ -376,11 +376,6 @@ class _studentFormState extends State<studentForm> {
                               color: cnst.appPrimaryMaterialColor,
                               style: BorderStyle.solid,
                               width: 3))),
-                  onChanged: (val) {
-                    setState(() {
-                      name = val;
-                    });
-                  },
                 ),
               ),
               Padding(
@@ -397,11 +392,6 @@ class _studentFormState extends State<studentForm> {
                               color: cnst.appPrimaryMaterialColor,
                               style: BorderStyle.solid,
                               width: 3))),
-                  onChanged: (val) {
-                    setState(() {
-                      fatherName = val;
-                    });
-                  },
                 ),
               ),
               Padding(
@@ -420,11 +410,6 @@ class _studentFormState extends State<studentForm> {
                               color: cnst.appPrimaryMaterialColor,
                               style: BorderStyle.solid,
                               width: 3))),
-                  onChanged: (val) {
-                    setState(() {
-                      fatherMobile = val;
-                    });
-                  },
                 ),
               ),
               Padding(
@@ -441,11 +426,6 @@ class _studentFormState extends State<studentForm> {
                               color: cnst.appPrimaryMaterialColor,
                               style: BorderStyle.solid,
                               width: 3))),
-                  onChanged: (val) {
-                    setState(() {
-                      motherName = val;
-                    });
-                  },
                 ),
               ),
               Padding(
@@ -464,11 +444,6 @@ class _studentFormState extends State<studentForm> {
                               color: cnst.appPrimaryMaterialColor,
                               style: BorderStyle.solid,
                               width: 3))),
-                  onChanged: (val) {
-                    setState(() {
-                      motherMobile = val;
-                    });
-                  },
                 ),
               ),
               Padding(
@@ -486,11 +461,6 @@ class _studentFormState extends State<studentForm> {
                               color: cnst.appPrimaryMaterialColor,
                               style: BorderStyle.solid,
                               width: 3))),
-                  onChanged: (val) {
-                    setState(() {
-                      address = val;
-                    });
-                  },
                 ),
               ),
               GestureDetector(
