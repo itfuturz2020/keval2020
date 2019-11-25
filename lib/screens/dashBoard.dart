@@ -13,7 +13,7 @@ class _dashBoardState extends State<dashBoard> {
       "image": "images/student_list.png",
       "title": "Student List",
       "color": 0xff2A3565,
-      "screen": "studentList"
+      "screen": "studentForm"
     },
     {
       "image": "images/employee.png",
@@ -83,7 +83,9 @@ class _dashBoardState extends State<dashBoard> {
                     crossAxisCount: 2),
                 itemBuilder: (BuildContext context, int index) {
                   return GestureDetector(
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.pushNamed(context, "/studentForm");
+                    },
                     child: Card(
                       margin: EdgeInsets.only(
                           left: 10, right: 10, top: 7, bottom: 7),
