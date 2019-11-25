@@ -13,7 +13,7 @@ class _dashBoardState extends State<dashBoard> {
       "image": "images/student_list.png",
       "title": "Student List",
       "color": 0xff2A3565,
-      "screen": "studentForm"
+      "screen": "studentList"
     },
     {
       "image": "images/employee.png",
@@ -53,7 +53,7 @@ class _dashBoardState extends State<dashBoard> {
       body: Column(
         children: <Widget>[
           Container(
-            height: MediaQuery.of(context).size.height / 3.6,
+            height: MediaQuery.of(context).size.height / 4,
             decoration: BoxDecoration(
                 color: cnst.appPrimaryMaterialColor,
                 borderRadius: BorderRadius.only(
@@ -84,7 +84,8 @@ class _dashBoardState extends State<dashBoard> {
                 itemBuilder: (BuildContext context, int index) {
                   return GestureDetector(
                     onTap: () {
-                      Navigator.pushNamed(context, "/studentForm");
+                      Navigator.pushNamed(
+                          context, "/${_menuList[index]["screen"]}");
                     },
                     child: Card(
                       margin: EdgeInsets.only(
@@ -127,6 +128,43 @@ class _dashBoardState extends State<dashBoard> {
                     ),
                   );
                 }),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 12, bottom: 12),
+            child: Align(
+              alignment: Alignment.bottomCenter,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  Container(
+                    width: 60,
+                    height: 60,
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                        color: cnst.fontColors,
+                        borderRadius: BorderRadius.all(Radius.circular(40))),
+                    child: Icon(
+                      Icons.filter_center_focus,
+                      color: Colors.white,
+                      size: 30,
+                    ),
+                  ),
+                  Container(
+                    width: 60,
+                    height: 60,
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                        color: cnst.fontColors,
+                        borderRadius: BorderRadius.all(Radius.circular(40))),
+                    child: Icon(
+                      Icons.add,
+                      color: Colors.white,
+                      size: 30,
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ),
         ],
       ),

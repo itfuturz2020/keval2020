@@ -1,6 +1,12 @@
 import 'package:bss_admin/screens/dashBoard.dart';
+import 'package:bss_admin/screens/employeeList.dart';
+import 'package:bss_admin/screens/feesDetail.dart';
 import 'package:bss_admin/screens/login.dart';
+import 'package:bss_admin/screens/photos.dart';
+import 'package:bss_admin/screens/salaryDetail.dart';
 import 'package:bss_admin/screens/splash.dart';
+import 'package:bss_admin/screens/studentList.dart';
+import 'package:bss_admin/screens/videos.dart';
 import 'package:flutter/material.dart';
 
 import 'common/constant.dart';
@@ -30,8 +36,14 @@ class _MyAppState extends State<MyApp> {
       routes: {
         '/': (context) => splash(),
         '/login': (context) => login(),
-        '/studentForm': (context) => studentForm(),
         '/dashBoard': (context) => dashBoard(),
+        '/studentForm': (context) => studentForm(),
+        '/employeeList': (context) => employeeList(),
+        '/videos': (context) => videos(),
+        '/photos': (context) => photos(),
+        '/feesDetail': (context) => feesDetail(),
+        '/salaryDetail': (context) => salaryDetail(),
+        '/studentList': (context) => studentList(),
       },
       theme: ThemeData(
         fontFamily: 'Montserrat',
