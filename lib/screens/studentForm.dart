@@ -18,6 +18,7 @@ class studentForm extends StatefulWidget {
 
 class _studentFormState extends State<studentForm> {
   List<courceClass> _courceClassList = [];
+  List<batchClass> _batchClassList = [];
   bool isLoading = false;
 
   TextEditingController txtName = new TextEditingController();
@@ -28,6 +29,7 @@ class _studentFormState extends State<studentForm> {
   TextEditingController txtAddress = new TextEditingController();
 
   courceClass _courceClass;
+  batchClass _batchClass;
   File _studentImage;
   String _fileName;
   String _path;
@@ -46,6 +48,7 @@ class _studentFormState extends State<studentForm> {
   void initState() {
     _dateTime = DateTime.now();
     _getCourceData();
+    _getBatchData();
     pr = new ProgressDialog(context, type: ProgressDialogType.Normal);
     pr.style(
         message: "Please Wait",
@@ -77,6 +80,35 @@ class _studentFormState extends State<studentForm> {
           } else {
             setState(() {
               _courceClassList = data;
+            });
+          }
+        }, onError: (e) {
+          showMsg("$e");
+          pr.hide();
+        });
+      } else {
+        showMsg("No Internet Connection.");
+      }
+    } on SocketException catch (_) {
+      showMsg("No Internet Connection.");
+    }
+  }
+
+  _getBatchData() async {
+    try {
+      final result = await InternetAddress.lookup('google.com');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        Future res = Services.getBatch();
+        pr.show();
+        res.then((data) async {
+          pr.hide();
+          if (data != null) {
+            setState(() {
+              _batchClassList = data;
+            });
+          } else {
+            setState(() {
+              _batchClassList = data;
             });
           }
         }, onError: (e) {
@@ -266,6 +298,7 @@ class _studentFormState extends State<studentForm> {
       txtAddress.text = "";
       _studentImage = null;
       _courceClass = null;
+      _batchClass = null;
     });
   }
 
@@ -299,7 +332,8 @@ class _studentFormState extends State<studentForm> {
                         txtMotherMobile.text == "" &&
                         txtAddress.text == "" &&
                         _studentImage == null &&
-                        _courceClass == null
+                        _courceClass == null &&
+                        _batchClass == null
                     ? Container()
                     : GestureDetector(
                         onTap: () {
@@ -333,16 +367,17 @@ class _studentFormState extends State<studentForm> {
                           ),
                         ),
                       ),
+                Padding(padding: EdgeInsets.only(top: 5)),
                 Row(
                   children: <Widget>[
                     Flexible(
                       flex: 1,
                       child: SizedBox(
-                        height: 60,
+                        height: 50,
                         child: InputDecorator(
                           decoration: new InputDecoration(
-                              contentPadding:
-                                  EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                              contentPadding: EdgeInsets.symmetric(
+                                  horizontal: 10, vertical: 5),
                               fillColor: Colors.white,
                               border: new OutlineInputBorder(
                                 borderRadius: new BorderRadius.circular(10),
@@ -352,10 +387,15 @@ class _studentFormState extends State<studentForm> {
                             hint: _courceClassList != null &&
                                     _courceClassList != "" &&
                                     _courceClassList.length > 0
-                                ? Text("Select Cource Type")
+                                ? Text("Select Cource Type",
+                                    style: TextStyle(
+                                      fontSize: 13,
+                                    ))
                                 : Text(
                                     "Cource Not Found",
-                                    style: TextStyle(fontSize: 14),
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                    ),
                                   ),
                             value: _courceClass,
                             onChanged: (val) {
@@ -368,7 +408,8 @@ class _studentFormState extends State<studentForm> {
                                 value: cources,
                                 child: Text(
                                   cources.name,
-                                  style: TextStyle(color: Colors.black),
+                                  style: TextStyle(
+                                      color: Colors.black, fontSize: 13),
                                 ),
                               );
                             }).toList(),
@@ -376,49 +417,55 @@ class _studentFormState extends State<studentForm> {
                         ),
                       ),
                     ),
+                    Padding(padding: EdgeInsets.only(left: 7)),
                     Flexible(
                       flex: 1,
                       child: SizedBox(
-                        height: 60,
+                        height: 50,
                         child: InputDecorator(
                           decoration: new InputDecoration(
-                              contentPadding:
-                              EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                              contentPadding: EdgeInsets.symmetric(
+                                  horizontal: 10, vertical: 5),
                               fillColor: Colors.white,
                               border: new OutlineInputBorder(
                                 borderRadius: new BorderRadius.circular(10),
                               )),
                           child: DropdownButtonHideUnderline(
-                              child: DropdownButton<courceClass>(
-                                hint: _courceClassList != null &&
-                                    _courceClassList != "" &&
-                                    _courceClassList.length > 0
-                                    ? Text("Select Cource Type")
-                                    : Text(
-                                  "Cource Not Found",
-                                  style: TextStyle(fontSize: 14),
+                              child: DropdownButton<batchClass>(
+                            hint: _batchClassList != null &&
+                                    _batchClassList != "" &&
+                                    _batchClassList.length > 0
+                                ? Text("Select Batch",
+                                    style: TextStyle(
+                                      fontSize: 13,
+                                    ))
+                                : Text("Batch Not Found",
+                                    style: TextStyle(
+                                      fontSize: 13,
+                                    )),
+                            value: _batchClass,
+                            onChanged: (val) {
+                              setState(() {
+                                _batchClass = val;
+                              });
+                            },
+                            items: _batchClassList.map((batchClass batch) {
+                              return DropdownMenuItem<batchClass>(
+                                value: batch,
+                                child: Text(
+                                  batch.name,
+                                  style: TextStyle(
+                                      color: Colors.black, fontSize: 13),
                                 ),
-                                value: _courceClass,
-                                onChanged: (val) {
-                                  setState(() {
-                                    _courceClass = val;
-                                  });
-                                },
-                                items: _courceClassList.map((courceClass cources) {
-                                  return DropdownMenuItem<courceClass>(
-                                    value: cources,
-                                    child: Text(
-                                      cources.name,
-                                      style: TextStyle(color: Colors.black),
-                                    ),
-                                  );
-                                }).toList(),
-                              )),
+                              );
+                            }).toList(),
+                          )),
                         ),
                       ),
                     ),
                   ],
-                ), Padding(
+                ),
+                Padding(
                   padding: const EdgeInsets.all(6.0),
                   child: TextFormField(
                     controller: txtName,
