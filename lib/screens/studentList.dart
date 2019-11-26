@@ -13,6 +13,29 @@ class _studentListState extends State<studentList> {
     return Scaffold(
       appBar: AppBar(
         title: Text("Student List"),
+        actions: <Widget>[
+          GestureDetector(
+            onTap: () {
+              Navigator.pushReplacementNamed(context, "/studentForm");
+            },
+            child: Padding(
+                padding: const EdgeInsets.all(10),
+                child: Container(
+                    width: 90,
+                    decoration: BoxDecoration(
+                        border: Border.all(color: Colors.black),
+                        borderRadius: BorderRadius.all(Radius.circular(5))),
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                          left: 3, right: 3, top: 2, bottom: 2),
+                      child: Text(
+                        "Add\nStudent",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontSize: 12),
+                      ),
+                    ))),
+          )
+        ],
       ),
       body: StaggeredGridView.countBuilder(
         crossAxisCount: 4,

@@ -10,6 +10,32 @@ Dio dio = new Dio();
 Xml2Json xml2json = new Xml2Json();
 
 class Services {
+  static Future<List> Login(String userName, String password) async {
+    String url = API_URL + 'StaffLogin?usename=$userName&password=$password';
+    print("Login URL: " + url);
+    try {
+      Response response = await dio.get(url);
+
+      if (response.statusCode == 200) {
+        List list = [];
+        print("Login Response: " + response.data.toString());
+        var responseData = response.data;
+        if (responseData["IsSuccess"] == true) {
+          print(responseData["Data"]);
+          list = responseData["Data"];
+        } else {
+          list = [];
+        }
+        return list;
+      } else {
+        throw Exception("Something Went Wrong");
+      }
+    } catch (e) {
+      print("Login Erorr : " + e.toString());
+      throw Exception(e);
+    }
+  }
+
   static Future<List<courceClass>> getCource() async {
     String url = API_URL + 'GetCource';
     print("getCource URL: " + url);
@@ -35,6 +61,31 @@ class Services {
     }
   }
 
+  static Future<List<batchClass>> getBatch() async {
+    String url = API_URL + 'GetBatch';
+    print("GetBatch URL: " + url);
+    try {
+      Response response = await dio.get(url);
+
+      if (response.statusCode == 200) {
+        List<batchClass> batchClassList = [];
+        print("GetBatch Response" + response.data.toString());
+
+        final jsonResponse = response.data;
+        batchClassData data = new batchClassData.fromJson(jsonResponse);
+
+        batchClassList = data.Data;
+
+        return batchClassList;
+      } else {
+        throw Exception("Something Went Wrong");
+      }
+    } catch (e) {
+      print("GetBatch Erorr : " + e.toString());
+      throw Exception(e);
+    }
+  }
+
   static Future<SaveDataClass> SaveStudent(body) async {
     print(body.toString());
     String url = API_URL + 'SaveStudent';
@@ -56,7 +107,7 @@ class Services {
 
         saveData.Message = responseData["Message"].toString();
         saveData.IsSuccess =
-            responseData["IsSuccess"] == "true" ? true : false;
+            responseData["IsSuccess"].toString() == "true" ? true : false;
         saveData.Data = responseData["Data"].toString();
 
         return saveData;
