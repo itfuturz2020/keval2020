@@ -36,6 +36,33 @@ class Services {
     }
   }
 
+  static Future<List> GetStudent(String courceId, String batchId) async {
+    String url =
+        API_URL + 'GetStudentByCourceBatch?CourceId=$courceId&BatchId=$batchId';
+    print("GetStudent URL: " + url);
+    try {
+      Response response = await dio.get(url);
+
+      if (response.statusCode == 200) {
+        List list = [];
+        print("GetStudent Response: " + response.data.toString());
+        var responseData = response.data;
+        if (responseData["IsSuccess"] == true) {
+          print(responseData["Data"]);
+          list = responseData["Data"];
+        } else {
+          list = [];
+        }
+        return list;
+      } else {
+        throw Exception("Something Went Wrong");
+      }
+    } catch (e) {
+      print("GetStudent Erorr : " + e.toString());
+      throw Exception(e);
+    }
+  }
+
   static Future<List<courceClass>> getCource() async {
     String url = API_URL + 'GetCource';
     print("getCource URL: " + url);

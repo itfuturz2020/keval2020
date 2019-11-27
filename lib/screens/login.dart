@@ -27,7 +27,6 @@ class _loginState extends State<login> {
         progressWidget: Container(
           padding: EdgeInsets.all(15),
           child: CircularProgressIndicator(
-            //backgroundColor: cnst.appPrimaryMaterialColor,
           ),
         ),
         elevation: 10.0,
@@ -36,11 +35,10 @@ class _loginState extends State<login> {
             color: Colors.black, fontSize: 17.0, fontWeight: FontWeight.w600));
   }
 
-  showMsg(String msg, {String title = 'Smart Society'}) {
+  showMsg(String msg, {String title = 'BSS Sports Academy'}) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        // return object of type Dialog
         return AlertDialog(
           title: new Text(title),
           content: new Text(msg),

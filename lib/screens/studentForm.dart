@@ -8,6 +8,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cupertino_date_picker/flutter_cupertino_date_picker.dart';
 import 'package:flutter_native_image/flutter_native_image.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 
@@ -43,6 +44,7 @@ class _studentFormState extends State<studentForm> {
 
   DateTime _dateTime;
   ProgressDialog pr;
+  String _practiceType = "Personal";
 
   @override
   void initState() {
@@ -230,14 +232,14 @@ class _studentFormState extends State<studentForm> {
 
           if (_studentImage != null) {
             ImageProperties properties =
-                await FlutterNativeImage.getImageProperties(_studentImage.path);
+            await FlutterNativeImage.getImageProperties(_studentImage.path);
 
             compressedFile = await FlutterNativeImage.compressImage(
               _studentImage.path,
               quality: 80,
               targetWidth: 600,
               targetHeight:
-                  (properties.height * 600 / properties.width).round(),
+              (properties.height * 600 / properties.width).round(),
             );
 
             filename = _studentImage.path.split('/').last;
@@ -257,17 +259,27 @@ class _studentFormState extends State<studentForm> {
             "Address": txtAddress.text,
             "CourceId": _courceClass.id,
             "JoinDate": _dateTime.toString(),
+            "CoachingType": _practiceType,
+            "BatchId": _batchClass.id,
             "Image": (filePath != null && filePath != '')
                 ? await MultipartFile.fromFile(filePath,
                     filename: filename.toString())
                 : null
           });
 
+          print(formData);
+
           Services.SaveStudent(formData).then((data) async {
             pr.hide();
             if (data.Data != "0" && data.IsSuccess == true) {
-              _clearData();
-              showMsg("Student Saved Successfully", title: "Success");
+              Fluttertoast.showToast(
+                  msg: "Student Added Successfully",
+                  toastLength: Toast.LENGTH_SHORT,
+                  backgroundColor: Colors.green,
+                  textColor: Colors.white,
+                  fontSize: 16.0
+              );
+              Navigator.pushReplacementNamed(context, "/studentList");
             } else {
               _clearData();
               showMsg(data.Message, title: "Error");
@@ -549,6 +561,52 @@ class _studentFormState extends State<studentForm> {
                                 width: 3))),
                   ),
                 ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: <Widget>[
+                    Text("Practice Type :",
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.w600)),
+                    GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          _practiceType = "Personal";
+                        });
+                      },
+                      child: Card(
+                          color: _practiceType == "Personal"
+                              ? Colors.grey[300]
+                              : Colors.white,
+                          elevation: _practiceType == "Personal" ? 4 : 1,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(25.0),
+                          ),
+                          child: Container(
+                              padding: EdgeInsets.only(
+                                  top: 13, bottom: 13, left: 22, right: 22),
+                              child: Text("Personal"))),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          _practiceType = "Normal";
+                        });
+                      },
+                      child: Card(
+                          color: _practiceType == "Normal"
+                              ? Colors.grey[300]
+                              : Colors.white,
+                          elevation: _practiceType == "Normal" ? 4 : 1,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(25.0),
+                          ),
+                          child: Container(
+                              padding: EdgeInsets.only(
+                                  top: 13, bottom: 13, left: 22, right: 22),
+                              child: Text("Normal"))),
+                    ),
+                  ],
+                ),
                 Padding(
                   padding: const EdgeInsets.all(6.0),
                   child: TextFormField(
@@ -662,7 +720,7 @@ class _studentFormState extends State<studentForm> {
                   ],
                 ),
                 Padding(
-                  padding: EdgeInsets.only(top: 10),
+                  padding: EdgeInsets.only(top: 10, bottom: 8),
                   child: RaisedButton(
                     onPressed: () {
                       _addStudent();
