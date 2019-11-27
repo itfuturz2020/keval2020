@@ -136,6 +136,10 @@ class _studentListState extends State<studentList> {
             });
             pr.hide();
           } else {
+            setState(() {
+              _studentList = data;
+              isFirst = false;
+            });
             pr.hide();
           }
         }, onError: (e) {
@@ -208,6 +212,7 @@ class _studentListState extends State<studentList> {
                 Padding(padding: EdgeInsets.only(top: 8)),
                 Row(
                   children: <Widget>[
+                    Padding(padding: EdgeInsets.only(left: 7)),
                     Expanded(
                       child: Column(
                         children: <Widget>[
@@ -458,7 +463,7 @@ class _studentListState extends State<studentList> {
                                                 setState(() {
                                                   _selectedAction = value;
                                                 });
-                                                print(value+index.toString());
+                                                print(value + index.toString());
                                               },
                                               child: Stack(
                                                 alignment: Alignment.center,

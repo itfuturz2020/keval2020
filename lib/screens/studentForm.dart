@@ -6,10 +6,10 @@ import 'package:bss_admin/common/constant.dart';
 import 'package:bss_admin/common/constant.dart' as cnst;
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:flutter_cupertino_date_picker/flutter_cupertino_date_picker.dart';
 import 'package:flutter_native_image/flutter_native_image.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 
 class studentForm extends StatefulWidget {
@@ -32,10 +32,6 @@ class _studentFormState extends State<studentForm> {
   courceClass _courceClass;
   batchClass _batchClass;
   File _studentImage;
-  String _fileName;
-  String _path;
-  bool _loadingPath = false;
-  bool _hasValidMime = false;
 
   DateTimePickerLocale _locale = DateTimePickerLocale.en_us;
 
@@ -187,8 +183,6 @@ class _studentFormState extends State<studentForm> {
                       );
                       if (image != null)
                         setState(() {
-                          _path = '';
-                          _fileName = '';
                           _studentImage = image;
                         });
                       Navigator.pop(context);
@@ -202,8 +196,6 @@ class _studentFormState extends State<studentForm> {
                       );
                       if (image != null)
                         setState(() {
-                          _path = '';
-                          _fileName = '';
                           _studentImage = image;
                         });
                       Navigator.pop(context);
@@ -228,25 +220,21 @@ class _studentFormState extends State<studentForm> {
           String filename = "";
           String filePath = "";
           File compressedFile;
-          pr.show();
 
           if (_studentImage != null) {
             ImageProperties properties =
-            await FlutterNativeImage.getImageProperties(_studentImage.path);
+                await FlutterNativeImage.getImageProperties(_studentImage.path);
 
             compressedFile = await FlutterNativeImage.compressImage(
               _studentImage.path,
-              quality: 80,
+              quality: 90,
               targetWidth: 600,
               targetHeight:
-              (properties.height * 600 / properties.width).round(),
+                  (properties.height * 600 / properties.width).round(),
             );
 
             filename = _studentImage.path.split('/').last;
             filePath = compressedFile.path;
-          } else if (_path != null && _path != '') {
-            filePath = _path;
-            filename = _fileName;
           }
 
           FormData formData = new FormData.fromMap({
@@ -259,15 +247,13 @@ class _studentFormState extends State<studentForm> {
             "Address": txtAddress.text,
             "CourceId": _courceClass.id,
             "JoinDate": _dateTime.toString(),
-            "CoachingType": _practiceType,
-            "BatchId": _batchClass.id,
             "Image": (filePath != null && filePath != '')
                 ? await MultipartFile.fromFile(filePath,
                     filename: filename.toString())
-                : null
+                : null,
+            "CoachingType": _practiceType,
+            "BatchId": _batchClass.id,
           });
-
-          print(formData);
 
           Services.SaveStudent(formData).then((data) async {
             pr.hide();
@@ -277,8 +263,7 @@ class _studentFormState extends State<studentForm> {
                   toastLength: Toast.LENGTH_SHORT,
                   backgroundColor: Colors.green,
                   textColor: Colors.white,
-                  fontSize: 16.0
-              );
+                  fontSize: 16.0);
               Navigator.pushReplacementNamed(context, "/studentList");
             } else {
               _clearData();
@@ -561,52 +546,77 @@ class _studentFormState extends State<studentForm> {
                                 width: 3))),
                   ),
                 ),
+                Padding(padding: EdgeInsets.only(top: 6)),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: <Widget>[
                     Text("Practice Type :",
                         style: TextStyle(
                             fontSize: 16, fontWeight: FontWeight.w600)),
-                    GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          _practiceType = "Personal";
-                        });
-                      },
-                      child: Card(
-                          color: _practiceType == "Personal"
-                              ? Colors.grey[300]
-                              : Colors.white,
-                          elevation: _practiceType == "Personal" ? 4 : 1,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(25.0),
+                    Padding(padding: EdgeInsets.only(left: 10)),
+                    Container(
+                      width: 190,
+                      decoration: BoxDecoration(
+                          color: Colors.grey[300],
+                          borderRadius: BorderRadius.all(Radius.circular(10))),
+                      padding: EdgeInsets.all(5),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: <Widget>[
+                          GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                _practiceType = "Personal";
+                              });
+                            },
+                            child: Container(
+                                decoration: _practiceType == "Personal"
+                                    ? BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(6)),
+                                      )
+                                    : null,
+                                padding: EdgeInsets.only(
+                                    left: 17, right: 17, top: 10, bottom: 10),
+                                child: Text("Personal",
+                                    style: _practiceType == "Personal"
+                                        ? TextStyle(
+                                            color: Colors.grey[700],
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.w600)
+                                        : null)),
                           ),
-                          child: Container(
-                              padding: EdgeInsets.only(
-                                  top: 13, bottom: 13, left: 22, right: 22),
-                              child: Text("Personal"))),
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          _practiceType = "Normal";
-                        });
-                      },
-                      child: Card(
-                          color: _practiceType == "Normal"
-                              ? Colors.grey[300]
-                              : Colors.white,
-                          elevation: _practiceType == "Normal" ? 4 : 1,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(25.0),
+                          Padding(padding: EdgeInsets.only(left: 4)),
+                          GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                _practiceType = "Normal";
+                              });
+                            },
+                            child: Container(
+                                decoration: _practiceType == "Normal"
+                                    ? BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(6)),
+                                      )
+                                    : null,
+                                padding: EdgeInsets.only(
+                                    left: 17, right: 17, top: 10, bottom: 10),
+                                child: Text("Normal",
+                                    style: _practiceType == "Normal"
+                                        ? TextStyle(
+                                            color: Colors.grey[700],
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.w600)
+                                        : null)),
                           ),
-                          child: Container(
-                              padding: EdgeInsets.only(
-                                  top: 13, bottom: 13, left: 22, right: 22),
-                              child: Text("Normal"))),
+                        ],
+                      ),
                     ),
                   ],
                 ),
+                Padding(padding: EdgeInsets.only(top: 6)),
                 Padding(
                   padding: const EdgeInsets.all(6.0),
                   child: TextFormField(

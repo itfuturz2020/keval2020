@@ -50,10 +50,21 @@ class _dashBoardState extends State<dashBoard> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text("Chirag Mevada",
+            style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.w600,
+                color: cnst.fontColors)),
+        leading: Icon(
+          Icons.person_outline,
+        ),
+        elevation: 0,
+      ),
       body: Column(
         children: <Widget>[
           Container(
-            height: MediaQuery.of(context).size.height / 4,
+            height: MediaQuery.of(context).size.height / 6,
             decoration: BoxDecoration(
                 color: cnst.appPrimaryMaterialColor,
                 borderRadius: BorderRadius.only(

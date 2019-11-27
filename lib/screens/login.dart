@@ -124,12 +124,11 @@ class _loginState extends State<login> {
                           const EdgeInsets.only(top: 20.0, left: 20, right: 20),
                       child: TextFormField(
                         controller: txtMobile,
-                        maxLength: 10,
-                        keyboardType: TextInputType.number,
+                        keyboardType: TextInputType.text,
                         style: TextStyle(color: cnst.fontColors),
                         decoration: InputDecoration(
-                            prefixIcon: Icon(Icons.phone_android),
-                            labelText: "Enter Mobile Number",
+                            prefixIcon: Icon(Icons.person),
+                            labelText: "Enter Username",
                             counterText: "",
                             hasFloatingPlaceholder: false,
                             border: OutlineInputBorder(
