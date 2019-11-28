@@ -169,8 +169,8 @@ class _loginState extends State<login> {
                       height: 50,
                       child: RaisedButton(
                         onPressed: () {
-                          Navigator.pushReplacementNamed(context, '/dashBoard');
-                          //checkLogin();
+                          //Navigator.pushReplacementNamed(context, '/dashBoard');
+                          checkLogin();
                         },
                         child: Text("LOGIN",
                             style: TextStyle(color: cnst.fontColors)),

@@ -117,21 +117,68 @@ class Services {
     print(body.toString());
     String url = API_URL + 'SaveStudent';
     print("SaveStudent : " + url);
-//    dio.options.contentType = Headers.formUrlEncodedContentType;
-//    dio.options.responseType = ResponseType.json;
     try {
       final response = await dio.post(url, data: body);
       if (response.statusCode == 200) {
         SaveDataClass saveData =
             new SaveDataClass(Message: 'No Data', IsSuccess: false, Data: '0');
-
-//        xml2json.parse(response.data.toString());
-//        var jsonData = xml2json.toParker();
-//        var responseData = json.decode(jsonData);
         var responseData = response.data;
 
         print("SaveStudent Response: " + responseData.toString());
 
+        saveData.Message = responseData["Message"].toString();
+        saveData.IsSuccess =
+            responseData["IsSuccess"].toString() == "true" ? true : false;
+        saveData.Data = responseData["Data"].toString();
+
+        return saveData;
+      } else {
+        print("Server Error");
+        throw Exception(response.data.toString());
+      }
+    } catch (e) {
+      print("App Error ${e.toString()}");
+      throw Exception(e.toString());
+    }
+  }
+
+  static Future<List> GetAllPhotos() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String Id = prefs.getString(Session.Id);
+    String url = API_URL + 'GetOtherStudentPhoto?studentId=$Id';
+    print("GetAllPhotos URL: " + url);
+    try {
+      Response response = await dio.get(url);
+
+      if (response.statusCode == 200) {
+        List list = [];
+        print("GetAllPhotos Response: " + response.data.toString());
+        var responseData = response.data;
+        if (responseData["IsSuccess"] == true) {
+          list = responseData["Data"];
+        } else {
+          list = [];
+        }
+        return list;
+      } else {
+        throw Exception("Something Went Wrong");
+      }
+    } catch (e) {
+      print("GetAllPhotosById Erorr : " + e.toString());
+      throw Exception(e);
+    }
+  }
+
+  static Future<SaveDataClass> SaveStudentByScan(String studentID) async {
+    String url = API_URL + 'SaveAttendance?StudentId=$studentID';
+    print("SaveStudentByScan : " + url);
+    try {
+      final response = await dio.get(url);
+      if (response.statusCode == 200) {
+        SaveDataClass saveData =
+            new SaveDataClass(Message: 'No Data', IsSuccess: false, Data: '0');
+        var responseData = response.data;
+        print("SaveStudentByScan Response: " + responseData.toString());
         saveData.Message = responseData["Message"].toString();
         saveData.IsSuccess =
             responseData["IsSuccess"].toString() == "true" ? true : false;

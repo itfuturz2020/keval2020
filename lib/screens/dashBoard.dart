@@ -1,6 +1,13 @@
+import 'dart:io';
+
+//import 'package:barcode_scan/barcode_scan.dart';
+import 'package:bss_admin/common/Services.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:bss_admin/common/constant.dart' as cnst;
+import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:progress_dialog/progress_dialog.dart';
 
 class dashBoard extends StatefulWidget {
   @override
@@ -8,6 +15,10 @@ class dashBoard extends StatefulWidget {
 }
 
 class _dashBoardState extends State<dashBoard> {
+  String barcode = "";
+
+  ProgressDialog pr;
+
   List _menuList = [
     {
       "image": "images/student_list.png",
@@ -48,6 +59,76 @@ class _dashBoardState extends State<dashBoard> {
   ];
 
   @override
+  void initState() {
+    pr = new ProgressDialog(context, type: ProgressDialogType.Normal);
+    pr.style(
+        message: "Please Wait",
+        borderRadius: 10.0,
+        progressWidget: Container(
+          padding: EdgeInsets.all(15),
+          child: CircularProgressIndicator(
+            backgroundColor: cnst.appPrimaryMaterialColor,
+          ),
+        ),
+        elevation: 10.0,
+        insetAnimCurve: Curves.easeInOut,
+        messageTextStyle: TextStyle(
+            color: Colors.black, fontSize: 17.0, fontWeight: FontWeight.w600));
+  }
+
+  _addStudent(String studID) async {
+    try {
+      final result = await InternetAddress.lookup('google.com');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        Services.SaveStudentByScan(studID).then((data) async {
+          pr.hide();
+          if (data.Data != "0" && data.IsSuccess == true) {
+            Fluttertoast.showToast(
+                msg: "Attendace Saved Successfully",
+                toastLength: Toast.LENGTH_SHORT,
+                backgroundColor: Colors.green,
+                textColor: Colors.white,
+                fontSize: 16.0);
+            Navigator.pushReplacementNamed(context, "/studentList");
+          } else {
+            showMsg(data.Message, title: "Error");
+          }
+        }, onError: (e) {
+          pr.hide();
+          showMsg("Try Again.");
+        });
+      } else {
+        showMsg("No Internet Connection.");
+      }
+    } on SocketException catch (_) {
+      pr.hide();
+      showMsg("No Internet Connection.");
+    }
+  }
+
+  showMsg(String msg, {String title = 'BSS Sports Academy'}) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        // return object of type Dialog
+        return AlertDialog(
+          title: new Text(title),
+          content: new Text(msg),
+          actions: <Widget>[
+            // usually buttons at the bottom of the dialog
+            new FlatButton(
+              child: new Text("Okay"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -60,6 +141,11 @@ class _dashBoardState extends State<dashBoard> {
           Icons.person_outline,
         ),
         elevation: 0,
+        actions: <Widget>[
+          IconButton(icon: Icon(Icons.exit_to_app), onPressed: () {
+            Navigator.pushReplacementNamed(context, "/login");
+          })
+        ],
       ),
       body: Column(
         children: <Widget>[
@@ -147,17 +233,20 @@ class _dashBoardState extends State<dashBoard> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
-                  Container(
-                    width: 60,
-                    height: 60,
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                        color: cnst.fontColors,
-                        borderRadius: BorderRadius.all(Radius.circular(40))),
-                    child: Icon(
-                      Icons.filter_center_focus,
-                      color: Colors.white,
-                      size: 30,
+                  GestureDetector(
+                    onTap: () {},
+                    child: Container(
+                      width: 60,
+                      height: 60,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                          color: cnst.fontColors,
+                          borderRadius: BorderRadius.all(Radius.circular(40))),
+                      child: Icon(
+                        Icons.filter_center_focus,
+                        color: Colors.white,
+                        size: 30,
+                      ),
                     ),
                   ),
                   Container(
@@ -181,4 +270,28 @@ class _dashBoardState extends State<dashBoard> {
       ),
     );
   }
+
+/*  Future scan() async {
+    try {
+      String barcode = await BarcodeScanner.scan();
+      print(barcode);
+      if (barcode != null) {
+        _addStudent(barcode);
+      } else
+        showMsg("Try Again..");
+    } on PlatformException catch (e) {
+      if (e.code == BarcodeScanner.CameraAccessDenied) {
+        setState(() {
+          this.barcode = 'The user did not grant the camera permission!';
+        });
+      } else {
+        setState(() => this.barcode = 'Unknown error: $e');
+      }
+    } on FormatException {
+      setState(() => this.barcode =
+          'null (User returned using the "back"-button before scanning anything. Result)');
+    } catch (e) {
+      setState(() => this.barcode = 'Unknown error: $e');
+    }
+  }*/
 }
