@@ -7,23 +7,11 @@ const Inr_Rupee = "₹";
 
 class Session {
   static const String session_login = "Login_data";
-  static const String CourceId = "CourceId";
-  static const String Id = "Id";
-  static const String FatherName = "FatherName";
-  static const String Name = "Member_Name";
-  static const String FatherMobile = "FatherMobile";
-  static const String MotherName = "MotherName";
-  static const String MotherMobile = "MotherMobile";
   static const String JoinDate = "JoinDate";
-  static const String BatchTime = "BatchTime";
-  static const String RegNo = "RegNo";
-  static const String Address = "Address";
-  static const String PracticeType = "PracticeType";
-  static const String CoachingType = "CoachingType";
-  static const String Email = "Email";
-  static const String Location= "Location";
-  static const String IsActive= "IsActive";
-  static const String Photo= "Photo";
+  static const String Id = "Id";
+  static const String Role = "Role";
+  static const String Name = "Name";
+  static const String Mobile = "Mobile";
 }
 
 Map<int, Color> appprimarycolors = {

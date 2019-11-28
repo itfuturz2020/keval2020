@@ -26,8 +26,7 @@ class _loginState extends State<login> {
         borderRadius: 10.0,
         progressWidget: Container(
           padding: EdgeInsets.all(15),
-          child: CircularProgressIndicator(
-          ),
+          child: CircularProgressIndicator(),
         ),
         elevation: 10.0,
         insetAnimCurve: Curves.easeInOut,
@@ -57,8 +56,7 @@ class _loginState extends State<login> {
   }
 
   checkLogin() async {
-    if (txtMobile.text != "" &&
-        txtPassword.text != "") {
+    if (txtMobile.text != "" && txtPassword.text != "") {
       try {
         final result = await InternetAddress.lookup('google.com');
         if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
@@ -68,10 +66,30 @@ class _loginState extends State<login> {
             SharedPreferences prefs = await SharedPreferences.getInstance();
             if (data != null && data.length > 0) {
               pr.hide();
-              /*await prefs.setString(
-                Session.MemberId,
+              await prefs.setString(
+                Session.session_login,
                 data[0]["Id"].toString(),
-              );*/
+              );
+              await prefs.setString(
+                Session.Id,
+                data[0]["Id"].toString(),
+              );
+              await prefs.setString(
+                Session.Name,
+                data[0]["Name"].toString(),
+              );
+              await prefs.setString(
+                Session.Mobile,
+                data[0]["Mobile"].toString(),
+              );
+              await prefs.setString(
+                Session.Role,
+                data[0]["Role"].toString(),
+              );
+              await prefs.setString(
+                Session.JoinDate,
+                data[0]["JoinDate"].toString(),
+              );
               Navigator.pushReplacementNamed(context, '/dashBoard');
             } else {
               pr.hide();

@@ -1,3 +1,4 @@
+import 'package:bss_admin/screens/StudentDetail.dart';
 import 'package:bss_admin/screens/dashBoard.dart';
 import 'package:bss_admin/screens/employeeList.dart';
 import 'package:bss_admin/screens/feesDetail.dart';

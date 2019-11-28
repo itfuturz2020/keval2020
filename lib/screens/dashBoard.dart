@@ -1,6 +1,7 @@
 import 'dart:io';
 
 //import 'package:barcode_scan/barcode_scan.dart';
+import 'package:barcode_scan/barcode_scan.dart';
 import 'package:bss_admin/common/Services.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +9,7 @@ import 'package:bss_admin/common/constant.dart' as cnst;
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:progress_dialog/progress_dialog.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class dashBoard extends StatefulWidget {
   @override
@@ -16,7 +18,7 @@ class dashBoard extends StatefulWidget {
 
 class _dashBoardState extends State<dashBoard> {
   String barcode = "";
-
+  String username = "";
   ProgressDialog pr;
 
   List _menuList = [
@@ -60,6 +62,7 @@ class _dashBoardState extends State<dashBoard> {
 
   @override
   void initState() {
+    getLocalData();
     pr = new ProgressDialog(context, type: ProgressDialogType.Normal);
     pr.style(
         message: "Please Wait",
@@ -74,6 +77,13 @@ class _dashBoardState extends State<dashBoard> {
         insetAnimCurve: Curves.easeInOut,
         messageTextStyle: TextStyle(
             color: Colors.black, fontSize: 17.0, fontWeight: FontWeight.w600));
+  }
+
+  getLocalData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      username = prefs.getString(cnst.Session.Name);
+    });
   }
 
   _addStudent(String studID) async {
@@ -132,7 +142,7 @@ class _dashBoardState extends State<dashBoard> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Chirag Mevada",
+        title: Text("$username",
             style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.w600,
@@ -142,9 +152,11 @@ class _dashBoardState extends State<dashBoard> {
         ),
         elevation: 0,
         actions: <Widget>[
-          IconButton(icon: Icon(Icons.exit_to_app), onPressed: () {
-            Navigator.pushReplacementNamed(context, "/login");
-          })
+          IconButton(
+              icon: Icon(Icons.exit_to_app),
+              onPressed: () {
+                Navigator.pushReplacementNamed(context, "/login");
+              })
         ],
       ),
       body: Column(
@@ -234,7 +246,9 @@ class _dashBoardState extends State<dashBoard> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
                   GestureDetector(
-                    onTap: () {},
+                    onTap: () {
+                      scan();
+                    },
                     child: Container(
                       width: 60,
                       height: 60,
@@ -271,7 +285,7 @@ class _dashBoardState extends State<dashBoard> {
     );
   }
 
-/*  Future scan() async {
+  Future scan() async {
     try {
       String barcode = await BarcodeScanner.scan();
       print(barcode);
@@ -293,5 +307,5 @@ class _dashBoardState extends State<dashBoard> {
     } catch (e) {
       setState(() => this.barcode = 'Unknown error: $e');
     }
-  }*/
+  }
 }

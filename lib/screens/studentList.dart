@@ -11,6 +11,8 @@ import 'package:progress_dialog/progress_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import 'StudentDetail.dart';
+
 class studentList extends StatefulWidget {
   @override
   _studentListState createState() => _studentListState();
@@ -335,80 +337,117 @@ class _studentListState extends State<studentList> {
                               crossAxisCount: 4,
                               itemCount: _studentList.length,
                               itemBuilder: (BuildContext context, int index) {
-                                return Card(
-                                  margin: EdgeInsets.all(5),
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Column(
-                                      children: <Widget>[
-                                        ClipOval(
-                                            child: _studentList[index]
-                                                            ["Photo"] !=
-                                                        null &&
-                                                    _studentList[index]
-                                                            ["Photo"] !=
-                                                        ""
-                                                ? FadeInImage.assetNetwork(
-                                                    placeholder: '',
-                                                    image: "http://bss.mobwebit.com/" +
-                                                        "${_studentList[index]["Photo"]}",
-                                                    width: 70,
-                                                    height: 70,
-                                                    fit: BoxFit.fill)
-                                                : Container(
-                                                    width: 70,
-                                                    height: 70,
-                                                    decoration: BoxDecoration(
-                                                        color: cnst
-                                                            .appPrimaryMaterialColor,
-                                                        borderRadius:
-                                                            BorderRadius.all(
-                                                                Radius.circular(
-                                                                    50))),
-                                                    child: Center(
-                                                      child: Text(
-                                                        "${_studentList[index]["Name"].toString().substring(0, 1).toUpperCase()}",
-                                                        style: TextStyle(
-                                                            fontSize: 26,
-                                                            color:
-                                                                Colors.white),
+                                return GestureDetector(
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => StudentDetail(
+                                            studentData: _studentList[index]),
+                                      ),
+                                    );
+                                  },
+                                  child: Card(
+                                    margin: EdgeInsets.all(5),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Column(
+                                        children: <Widget>[
+                                          ClipOval(
+                                              child: _studentList[index]
+                                                              ["Photo"] !=
+                                                          null &&
+                                                      _studentList[index]
+                                                              ["Photo"] !=
+                                                          ""
+                                                  ? FadeInImage.assetNetwork(
+                                                      placeholder: '',
+                                                      image: "http://bss.mobwebit.com/" +
+                                                          "${_studentList[index]["Photo"]}",
+                                                      width: 70,
+                                                      height: 70,
+                                                      fit: BoxFit.fill)
+                                                  : Container(
+                                                      width: 70,
+                                                      height: 70,
+                                                      decoration: BoxDecoration(
+                                                          color: cnst
+                                                              .appPrimaryMaterialColor,
+                                                          borderRadius:
+                                                              BorderRadius.all(
+                                                                  Radius
+                                                                      .circular(
+                                                                          50))),
+                                                      child: Center(
+                                                        child: Text(
+                                                          "${_studentList[index]["Name"].toString().substring(0, 1).toUpperCase()}",
+                                                          style: TextStyle(
+                                                              fontSize: 26,
+                                                              color:
+                                                                  Colors.white),
+                                                        ),
                                                       ),
-                                                    ),
-                                                  )),
-                                        Padding(
-                                            padding: EdgeInsets.only(top: 4)),
-                                        Text(
-                                          "${_studentList[index]["Id"]}",
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.w600,
-                                          ),
-                                        ),
-                                        Text(
-                                          "${_studentList[index]["Name"]}",
-                                          style: TextStyle(
-                                              fontSize: 17,
+                                                    )),
+                                          Padding(
+                                              padding: EdgeInsets.only(top: 4)),
+                                          Text(
+                                            "${_studentList[index]["Id"]}",
+                                            style: TextStyle(
                                               fontWeight: FontWeight.w600,
-                                              color: cnst.fontColors),
-                                        ),
-                                        Text(
-                                          "${_studentList[index]["CourceName"]}",
-                                          style: TextStyle(
-                                              color: Colors.grey[600]),
-                                        ),
-                                        Padding(
-                                            padding: EdgeInsets.only(top: 5)),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceAround,
-                                          children: <Widget>[
-                                            GestureDetector(
-                                              onTap: () {
-                                                launch("tel:" +
-                                                    _studentList[index]
-                                                            ["FatherMobile"]
-                                                        .toString());
-                                              },
-                                              child: Stack(
+                                            ),
+                                          ),
+                                          Text(
+                                            "${_studentList[index]["Name"]}",
+                                            style: TextStyle(
+                                                fontSize: 17,
+                                                fontWeight: FontWeight.w600,
+                                                color: cnst.fontColors),
+                                          ),
+                                          Text(
+                                            "${_studentList[index]["CourceName"]}",
+                                            style: TextStyle(
+                                                color: Colors.grey[600]),
+                                          ),
+                                          Padding(
+                                              padding: EdgeInsets.only(top: 5)),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceAround,
+                                            children: <Widget>[
+                                              GestureDetector(
+                                                onTap: () {
+                                                  launch("tel:" +
+                                                      _studentList[index]
+                                                              ["FatherMobile"]
+                                                          .toString());
+                                                },
+                                                child: Stack(
+                                                  alignment: Alignment.center,
+                                                  children: <Widget>[
+                                                    Opacity(
+                                                      child: Container(
+                                                        width: 37,
+                                                        height: 37,
+                                                        decoration: BoxDecoration(
+                                                            color: Colors.green,
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .all(Radius
+                                                                        .circular(
+                                                                            50))),
+                                                        alignment:
+                                                            Alignment.center,
+                                                      ),
+                                                      opacity: 0.15,
+                                                    ),
+                                                    Icon(
+                                                      Icons.call,
+                                                      color: Colors.green[700],
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                              Stack(
                                                 alignment: Alignment.center,
                                                 children: <Widget>[
                                                   Opacity(
@@ -416,7 +455,8 @@ class _studentListState extends State<studentList> {
                                                       width: 37,
                                                       height: 37,
                                                       decoration: BoxDecoration(
-                                                          color: Colors.green,
+                                                          color:
+                                                              Colors.blueAccent,
                                                           borderRadius:
                                                               BorderRadius.all(
                                                                   Radius
@@ -428,84 +468,62 @@ class _studentListState extends State<studentList> {
                                                     opacity: 0.15,
                                                   ),
                                                   Icon(
-                                                    Icons.call,
-                                                    color: Colors.green[700],
+                                                    Icons.location_on,
+                                                    color: Colors.blueAccent,
                                                   ),
                                                 ],
                                               ),
-                                            ),
-                                            Stack(
-                                              alignment: Alignment.center,
-                                              children: <Widget>[
-                                                Opacity(
-                                                  child: Container(
-                                                    width: 37,
-                                                    height: 37,
-                                                    decoration: BoxDecoration(
-                                                        color:
-                                                            Colors.blueAccent,
-                                                        borderRadius:
-                                                            BorderRadius.all(
-                                                                Radius.circular(
-                                                                    50))),
-                                                    alignment: Alignment.center,
-                                                  ),
-                                                  opacity: 0.15,
-                                                ),
-                                                Icon(
-                                                  Icons.location_on,
-                                                  color: Colors.blueAccent,
-                                                ),
-                                              ],
-                                            ),
-                                            PopupMenuButton<String>(
-                                              onSelected: (String value) {
-                                                setState(() {
-                                                  _selectedAction = value;
-                                                });
-                                                print(value + index.toString());
-                                              },
-                                              child: Stack(
-                                                alignment: Alignment.center,
-                                                children: <Widget>[
-                                                  Opacity(
-                                                    child: Container(
-                                                      width: 37,
-                                                      height: 37,
-                                                      decoration: BoxDecoration(
-                                                          color: Colors.orange,
-                                                          borderRadius:
-                                                              BorderRadius.all(
-                                                                  Radius
-                                                                      .circular(
-                                                                          50))),
-                                                      alignment:
-                                                          Alignment.center,
+                                              PopupMenuButton<String>(
+                                                onSelected: (String value) {
+                                                  setState(() {
+                                                    _selectedAction = value;
+                                                  });
+                                                  print(
+                                                      value + index.toString());
+                                                },
+                                                child: Stack(
+                                                  alignment: Alignment.center,
+                                                  children: <Widget>[
+                                                    Opacity(
+                                                      child: Container(
+                                                        width: 37,
+                                                        height: 37,
+                                                        decoration: BoxDecoration(
+                                                            color:
+                                                                Colors.orange,
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .all(Radius
+                                                                        .circular(
+                                                                            50))),
+                                                        alignment:
+                                                            Alignment.center,
+                                                      ),
+                                                      opacity: 0.15,
                                                     ),
-                                                    opacity: 0.15,
+                                                    Icon(
+                                                      Icons.more_horiz,
+                                                      color: Colors.orange,
+                                                    ),
+                                                  ],
+                                                ),
+                                                itemBuilder: (BuildContext
+                                                        context) =>
+                                                    <PopupMenuEntry<String>>[
+                                                  const PopupMenuItem<String>(
+                                                    value: 'Edit',
+                                                    child: Text('Edit'),
                                                   ),
-                                                  Icon(
-                                                    Icons.more_horiz,
-                                                    color: Colors.orange,
+                                                  const PopupMenuItem<String>(
+                                                    value: 'Delete',
+                                                    child: Text('Delete'),
                                                   ),
                                                 ],
-                                              ),
-                                              itemBuilder:
-                                                  (BuildContext context) =>
-                                                      <PopupMenuEntry<String>>[
-                                                const PopupMenuItem<String>(
-                                                  value: 'Edit',
-                                                  child: Text('Edit'),
-                                                ),
-                                                const PopupMenuItem<String>(
-                                                  value: 'Delete',
-                                                  child: Text('Delete'),
-                                                ),
-                                              ],
-                                            )
-                                          ],
-                                        ),
-                                      ],
+                                              )
+                                            ],
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ),
                                 );
