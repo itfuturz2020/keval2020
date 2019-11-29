@@ -125,35 +125,38 @@ class _studentListState extends State<studentList> {
   }
 
   getStudentData() async {
-    try {
-      final result = await InternetAddress.lookup('google.com');
-      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
-        pr.show();
-        Future res = Services.GetStudent(_courceClass.id, _batchClass.id);
-        res.then((data) async {
-          if (data != null && data.length > 0) {
-            setState(() {
-              _studentList = data;
-              isFirst = false;
-            });
+    if (_courceClass != null && _batchClass != null) {
+      try {
+        final result = await InternetAddress.lookup('google.com');
+        if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+          pr.show();
+          Future res = Services.GetStudent(_courceClass.id, _batchClass.id);
+          res.then((data) async {
+            if (data != null && data.length > 0) {
+              setState(() {
+                _studentList = data;
+                isFirst = false;
+              });
+              pr.hide();
+            } else {
+              setState(() {
+                _studentList = data;
+                isFirst = false;
+              });
+              pr.hide();
+            }
+          }, onError: (e) {
             pr.hide();
-          } else {
-            setState(() {
-              _studentList = data;
-              isFirst = false;
-            });
-            pr.hide();
-          }
-        }, onError: (e) {
-          pr.hide();
-          showMsg("$e");
-        });
-      } else {
+            showMsg("$e");
+          });
+        } else {
+          showMsg("No Internet Connection.");
+        }
+      } on SocketException catch (_) {
         showMsg("No Internet Connection.");
       }
-    } on SocketException catch (_) {
-      showMsg("No Internet Connection.");
-    }
+    } else
+      showMsg("Please Select All Fields");
   }
 
   showMsg(String msg, {String title = 'BSS Sports Academy'}) {
